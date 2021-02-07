@@ -1,0 +1,125 @@
+{
+  "groups": [
+    {
+      "name": "dockets",
+      "type": "com.lirlo.core.config.DocketProperties",
+      "sourceType": "com.lirlo.core.config.DocketProperties"
+    },
+    {
+      "name": "lirlo",
+      "type": "com.lirlo.core.config.LirloProperties",
+      "sourceType": "com.lirlo.core.config.LirloProperties"
+    },
+    {
+      "name": "lirlo.swagger-config",
+      "type": "com.lirlo.core.config.SwaggerConfig",
+      "sourceType": "com.lirlo.core.config.LirloProperties",
+      "sourceMethod": "getSwaggerConfig()"
+    },
+    {
+      "name": "swagger-config",
+      "type": "com.lirlo.core.config.SwaggerConfig",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "dockets.api-base-package",
+      "type": "java.lang.String",
+      "sourceType": "com.lirlo.core.config.DocketProperties"
+    },
+    {
+      "name": "dockets.bean-name",
+      "type": "java.lang.String",
+      "sourceType": "com.lirlo.core.config.DocketProperties"
+    },
+    {
+      "name": "dockets.group-name",
+      "type": "java.lang.String",
+      "sourceType": "com.lirlo.core.config.DocketProperties"
+    },
+    {
+      "name": "lirlo.swagger-config.bean-factory",
+      "type": "org.springframework.beans.factory.config.ConfigurableListableBeanFactory",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "lirlo.swagger-config.description",
+      "type": "java.lang.String",
+      "description": "描述",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "lirlo.swagger-config.dockets",
+      "type": "java.util.List<com.lirlo.core.config.DocketProperties>",
+      "description": "docket",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "lirlo.swagger-config.enable-swagger",
+      "type": "java.lang.Boolean",
+      "description": "是否开启swagger",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig",
+      "defaultValue": false
+    },
+    {
+      "name": "lirlo.swagger-config.lirlo-properties",
+      "type": "com.lirlo.core.config.LirloProperties",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "lirlo.swagger-config.title",
+      "type": "java.lang.String",
+      "description": "标题",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "lirlo.swagger-config.version",
+      "type": "java.lang.String",
+      "description": "版本号",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "swagger-config.bean-factory",
+      "type": "org.springframework.beans.factory.config.ConfigurableListableBeanFactory",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "swagger-config.description",
+      "type": "java.lang.String",
+      "description": "描述",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "swagger-config.dockets",
+      "type": "java.util.List<com.lirlo.core.config.DocketProperties>",
+      "description": "docket",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "swagger-config.enable-swagger",
+      "type": "java.lang.Boolean",
+      "description": "是否开启swagger",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig",
+      "defaultValue": false
+    },
+    {
+      "name": "swagger-config.lirlo-properties",
+      "type": "com.lirlo.core.config.LirloProperties",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "swagger-config.title",
+      "type": "java.lang.String",
+      "description": "标题",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    },
+    {
+      "name": "swagger-config.version",
+      "type": "java.lang.String",
+      "description": "版本号",
+      "sourceType": "com.lirlo.core.config.SwaggerConfig"
+    }
+  ],
+  "hints": []
+}

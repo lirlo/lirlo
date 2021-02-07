@@ -1,0 +1,77 @@
+
+
+spring:
+  datasource:
+    #   数据源基本配置
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/stu_pro?serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #   Druid数据源配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 1000
+    database: 0
+    password:
+    cluster:
+      nodes: 127.0.0.1:6379
+
+
+lirlo:
+  swagger-config:
+    enable-swagger: true
+    dockets:
+      - group-name: 基础
+        bean-name: docket1
+        api-base-package: com.lirlo.base
+      - group-name: 系统
+        bean-name: docket2
+        api-base-package: com.lirlo.system
+    title: Rest
+    version: 1.0.0
+    description: rest
+
+mybatis-plus:
+  type-aliases-package: com.lirlo
+  mapper-locations:
+    - classpath*:com/lirlo/**/mapper/**/xml/*Mapper.xml
+    - classpath:/META-INF/admin-mybatis-mappings/*.xml
+    - classpath:/META-INF/modeler-mybatis-mappings/*.xml
+  configuration:
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  configuration-properties:
+    prefix:
+    boolValue: TRUE
+    blobType: BLOB
+
+
+flowable:
+  database-schema-update: true
+  api:
+    isLocal: true #是否本地调用
+  async-executor-activate: false #发生产环境前改为true
+rocket:
+  producer-group: mq-group
+  namesrv-addr: localhost:9876
+  instance-name: mq-instance-name
+

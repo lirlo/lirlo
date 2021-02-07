@@ -1,0 +1,11 @@
+
+N
+java:S1128"8Remove this unused import 'javax.xml.ws.RespectBinding'.(Úø‹´
+I
+java:S1602b",Remove useless curly braces around statement(áŸÙÂ8öşÂÌ».
+]	java:S125`"<This block of commented-out lines of code should be removed.(–Ê×¬ÿÿÿÿÿ8öşÂÌ».
+†
+java:S1128
+"dRemove this unused import 'org.springframework.boot.context.properties.NestedConfigurationProperty'.(åìøÿÿÿÿ8•‚…Ì».
+l
+java:S1128"ORemove this unused import 'org.springframework.beans.factory.annotation.Value'.(ìø›8å·…Ì».
