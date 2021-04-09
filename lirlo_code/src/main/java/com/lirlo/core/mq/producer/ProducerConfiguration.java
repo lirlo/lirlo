@@ -27,6 +27,7 @@ public class ProducerConfiguration {
         log.info("RocketMq:producerGroup{}"+producerGroup);
         log.info("RocketMq:namesvAddr{}"+namesvAddr);
         log.info("RocketMq:instanceName{}"+instanceName);
+
     }
 
     @Bean

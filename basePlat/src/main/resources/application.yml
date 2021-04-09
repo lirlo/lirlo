@@ -42,13 +42,13 @@ lirlo:
     dockets:
       - group-name: 基础
         bean-name: docket1
-        api-base-package: com.lirlo.base
+        api-base-package: com.lirlo.baseplat.base
       - group-name: 系统
         bean-name: docket2
-        api-base-package: com.lirlo.system
-      - group-name: 工作流
+        api-base-package: com.lirlo.baseplat.system
+      - group-name: 权限管理
         bean-name: docket3
-        api-base-package: com.lirlo.core.workflow
+        api-base-package: com.lirlo.baseplat.security
     title: Rest
     version: 1.0.0
     description: rest

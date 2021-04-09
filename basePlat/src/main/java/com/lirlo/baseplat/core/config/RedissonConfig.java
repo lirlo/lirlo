@@ -1,4 +1,4 @@
-package com.lirlo.core.config;
+package com.lirlo.baseplat.core.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
