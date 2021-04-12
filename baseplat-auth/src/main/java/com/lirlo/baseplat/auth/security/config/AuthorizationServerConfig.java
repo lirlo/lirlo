@@ -26,7 +26,7 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 import javax.annotation.Resource;
 import java.util.Arrays;
 /**
- * @author ltzhang
+ * @author lirlo
  * @time 2019-11-28
  */
 
