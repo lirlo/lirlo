@@ -85,6 +85,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage(docketProperties.getApiBasePackage()))
                 //指定路径处理PathSelectors.any()代表所有的路径
                 .paths(PathSelectors.any())
+
                 .build();
     }
 

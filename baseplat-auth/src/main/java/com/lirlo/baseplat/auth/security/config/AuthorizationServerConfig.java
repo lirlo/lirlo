@@ -4,6 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.lirlo.baseplat.auth.security.service.OauthClientDetailsServiceImpl;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,11 +28,9 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 /**
  * @author lirlo
- * @time 2019-11-28
- */
-
-/**
- * 认证服务器配置
+ * @since 2021/04/14
+ * @description 认证服务器配置
+ * @version 1.0.0
  */
 @Configuration
 @EnableAuthorizationServer
@@ -47,8 +46,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private DruidDataSource dataSource;
 
-//    @Autowired
-//    private JedisConnectionFactory jedisConnectionFactory;
+    /**
+     * signingKey
+     */
+    @Value("${security.jwt.signingKey}")
+    private String signingKey;
 
     /**
      * 已授权客户端存储记录
@@ -110,11 +112,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return new CustomTokenEnhancer();
     }
 
-//    @Bean
-//    public TokenStore tokenStore() {
-//        return new JwtTokenStore(accessTokenConverter());
-//    }
-
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 
@@ -125,7 +122,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("123");
+        converter.setSigningKey(signingKey);
         return converter;
     }
 

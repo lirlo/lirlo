@@ -1,11 +1,10 @@
 package com.lirlo.baseplat.auth.security.controller;
 
-import com.lirlo.baseplat.auth.security.model.ResultInfo;
 import com.lirlo.baseplat.auth.security.model.JwtUser;
 import com.lirlo.baseplat.auth.security.service.UserDetailsServiceImpl;
+import com.lirlo.baseplat.core.common.ResultInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,13 +48,4 @@ public class SecurityController {
         return ResultInfo.builder().msg("你好").code(200).build();
     }
 
-    @ApiOperation(value = "security登录", notes = "登录验证托管给security")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query"),
-    })
-    @PostMapping("/doLogin")
-    public ResultInfo doLogin(@RequestParam("username") String username, @RequestParam("password")String password, HttpServletRequest req){
-        return this.userDetailsService.login(username, password, req);
-    }
 }

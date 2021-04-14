@@ -3,7 +3,6 @@ package com.lirlo.baseplat.auth.security.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lirlo.baseplat.auth.security.mapper.UserMapper;
 import com.lirlo.baseplat.auth.security.model.JwtUser;
-import com.lirlo.baseplat.auth.security.model.ResultInfo;
 import com.lirlo.baseplat.auth.security.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +11,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,6 +25,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * @author qiwen.li
+ * @since 2021/04/14
+ * @description UserDetailsService实现类
+ * @version 1.0.0
+ */
 @Service
 @Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -44,6 +47,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Value("${security.jwt.header}")
     private String tokenHeader;
 
+    /**
+     * 通过用户名加载用户信息
+     * @param s 用户名username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
@@ -61,6 +70,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
 
+    /**
+     * 获取用户角色
+     * // TODO: 2021/4/14 需重写
+     * @return
+     */
     private Collection<GrantedAuthority> getAuthorities(){
         List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
         authList.add(new SimpleGrantedAuthority("ROLE_USER"));
@@ -78,41 +92,25 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
     }
 
+    /**
+     * 通过token获取用户信息
+     * @param request
+     * @return
+     */
     public JwtUser getAuthenticatedUser(HttpServletRequest request){
-        String token = request.getHeader(tokenHeader).substring(7);
+        String token = request.getHeader(tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(token);
         JwtUser user = (JwtUser) loadUserByUsername(username);
         return user;
     }
 
+    /**
+     * 生成token
+     * @param userDetails
+     * @return
+     */
     public String createAuthenticationToken(UserDetails userDetails){
         return jwtTokenUtil.generateToken(userDetails);
     }
-
-    public ResultInfo login(String username,String password,HttpServletRequest req){
-        Authentication authenticate = null;
-        try {
-            authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException | BadCredentialsException e) {
-            return ResultInfo.builder().code(500).msg("账户名或密码错误").build();
-        }
-
-        if(authenticate == null){
-            return ResultInfo.builder().code(500).msg("账户名或密码错误").build();
-        }
-        //存储认证信息
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
-        //生成token
-        final JwtUser user = (JwtUser) authenticate.getPrincipal();
-        if(user != null){
-            // token信息保存在request域，随后保存在响应头
-            String token = jwtTokenUtil.createToken(username);
-            req.setAttribute("currentUser", user);
-            req.setAttribute("token", token);
-            return ResultInfo.builder().code(200).msg("登录成功").data(user).build();
-        }
-        return ResultInfo.builder().code(500).msg("账户名或密码错误").build();
-    }
-
 
 }

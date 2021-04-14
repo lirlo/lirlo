@@ -13,45 +13,42 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * @author qiwen.li
+ * @since 2021/04/14
+ * @description token工具类
+ * @version 1.0.0
+ */
 @Component
 public class JwtTokenUtil {
 
     private static final long serialVersionUID = -2550185165626007488L;
-    private static long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    /**
+     * 过期时间
+     */
+    private static long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 1000;
 
+    /**
+     * signingKey
+     */
     @Value("${security.jwt.signingKey}")
-    private static String signingKey;
+    private String signingKey;
 
-    public String createToken(String userName) {
-        String token = Jwts.builder().setSubject(userName)
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
-                .signWith(SignatureAlgorithm.HS512, signingKey).compressWith(CompressionCodecs.GZIP).compact();
-        return token;
-    }
 
-//    public static String createToken(String userName, String role) {
-//        String token = Jwts.builder().setSubject(userName)
-//                .claim(userRoleKey, role)
-//                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
-//                .signWith(SignatureAlgorithm.HS512, tokenSignKey).compressWith(CompressionCodecs.GZIP).compact();
-//        return token;
-//    }
-
-//    public static String getUsernameFromToken(String token) {
-//        String userName = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token).getBody().getSubject();
-//        return userName;
-//    }
-
-//    public static String getUserRoleFromToken(String token) {
-//        Claims claims = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token).getBody();
-//        return claims.get(userRoleKey).toString();
-//    }
-
-    //retrieve username from jwt token
+    /**
+     * 通过token获取用户信息
+     * @param token
+     * @return username
+     */
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
-    //retrieve expiration date from jwt token
+
+    /**
+     *
+     * @param token
+     * @return
+     */
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
@@ -59,31 +56,43 @@ public class JwtTokenUtil {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
-    //for retrieveing any information from token we will need the secret key
+
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(signingKey).parseClaimsJws(token).getBody();
     }
-    //check if the token has expired
+
+    /**
+     * 校验是否过期
+     * @param token
+     * @return
+     */
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
-    //generate token for user
+
+    /**
+     * 生成token
+     * @param userDetails
+     * @return token
+     */
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return doGenerateToken(claims, userDetails.getUsername());
     }
-    //while creating the token -
-//1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
-//2. Sign the JWT using the HS512 algorithm and secret key.
-//3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
-//   compaction of the JWT to a URL-safe string
+
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512, signingKey).compact();
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY ))
+                .signWith(SignatureAlgorithm.HS512, signingKey).compressWith(CompressionCodecs.GZIP).compact();
     }
-    //validate token
+
+    /**
+     * 校验token
+     * @param token
+     * @param userDetails
+     * @return
+     */
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));

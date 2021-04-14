@@ -3,8 +3,10 @@ package com.lirlo.baseplat.auth.security.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import com.lirlo.baseplat.auth.security.service.UserDetailsServiceImpl;
+import com.lirlo.baseplat.auth.security.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,6 +20,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +32,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+/**
+ * @author qiwen.li
+ * @since 2021/04/14
+ * @description SpringSecurity配置类
+ * @version 1.0.0
+ */
 @EnableWebSecurity
 @EnableSwagger2
 @EnableSwaggerBootstrapUI
@@ -48,6 +58,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     //自定义认证处理器
     @Autowired
     private IAuthenticationProvider IAuthenticationProvider;
+
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    RedissonConfig redissonConfig;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
 
     /**
@@ -94,20 +113,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated() //必须授权才能范围
                 .and().authenticationProvider(authenticationProvider())
                 .httpBasic()
-                //未登录时，进行json格式的提示，很喜欢这种写法，不用单独写一个又一个的类
+                //未登录时处理
                 .authenticationEntryPoint((request,response,authException) -> {
                     response.setContentType("application/json;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     PrintWriter out = response.getWriter();
                     Map<String,Object> map = new HashMap<String,Object>();
                     map.put("code",403);
-                    map.put("message","未登录");
+                    map.put("message",authException.getMessage());
                     out.write(objectMapper.writeValueAsString(map));
                     out.flush();
                     out.close();
                 })
                 .and().formLogin().permitAll()
-                //登录失败，返回json
+                //登录失败处理
                 .failureHandler((request,response,ex) -> {
                     response.setContentType("application/json;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -119,18 +138,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     } else if (ex instanceof DisabledException) {
                         map.put("message","账户被禁用");
                     } else {
-                        map.put("message","登录失败!");
+                        map.put("message", ex.getMessage());
                     }
                     out.write(objectMapper.writeValueAsString(map));
                     out.flush();
                     out.close();
                 })
-                //登录成功，返回json
+                //登录成功处理
                 .successHandler((request,response,authentication) -> {
                     Map<String,Object> map = new HashMap<String,Object>();
+                    String token = jwtTokenUtil.generateToken((UserDetails) authentication.getPrincipal());
                     map.put("code",200);
                     map.put("message","登录成功");
                     map.put("data",authentication);
+                    map.put("token",token);
+                    redisTemplate.opsForValue().set("token",token,60, TimeUnit.SECONDS);
                     response.setContentType("application/json;charset=utf-8");
                     PrintWriter out = response.getWriter();
                     out.write(objectMapper.writeValueAsString(map));
@@ -138,20 +160,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     out.close();
                 })
                 .and().exceptionHandling()
-                //没有权限，返回json
+                //没有权限处理
                 .accessDeniedHandler((request,response,ex) -> {
                     response.setContentType("application/json;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     PrintWriter out = response.getWriter();
                     Map<String,Object> map = new HashMap<String,Object>();
                     map.put("code",403);
-                    map.put("message", "权限不足");
+                    map.put("message", ex.getMessage());
                     out.write(objectMapper.writeValueAsString(map));
                     out.flush();
                     out.close();
                 })
-                .and().logout()
-                //退出成功，返回json
+                .and().logout()//.logoutSuccessUrl("/auth/doLogin")
+                //退出成功处理
                 .logoutSuccessHandler((request,response,authentication) -> {
                     Map<String,Object> map = new HashMap<String,Object>();
                     map.put("code",200);

@@ -9,6 +9,11 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author qiwen.li
+ * @since 2021/04/14
+ * @description oauth2 token information
+ */
 public class CustomTokenEnhancer implements TokenEnhancer {
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {

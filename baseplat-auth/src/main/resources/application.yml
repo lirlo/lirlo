@@ -3,16 +3,25 @@ lirlo:
   swagger-config:
     enable-swagger: true
     dockets:
-      - group-name: 权限管理
+      - group-name: 基础
         bean-name: docket1
+        api-base-package: com.lirlo.baseplat.core.base
+        version: v1
+      - group-name: 系统
+        bean-name: docket2
+        api-base-package: com.lirlo.baseplat.core.system
+        version: v1
+      - group-name: 权限管理
+        bean-name: docket3
         api-base-package: com.lirlo.baseplat.auth.security
-    title: Rest
+        version: v1
+    title: basePlat
     version: 1.0.0
-    description: rest
+    description: baseplat-auth
 mybatis-plus:
-  type-aliases-package: com.lirlo
+  type-aliases-package: com.lirlo.baseplat
   mapper-locations:
-    - classpath*:com/lirlo/**/mapper/**/xml/*Mapper.xml
+    - classpath*:com/lirlo/baseplat/**/mapper/**/xml/*Mapper.xml
     - classpath:/META-INF/admin-mybatis-mappings/*.xml
     - classpath:/META-INF/modeler-mybatis-mappings/*.xml
   configuration:

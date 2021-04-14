@@ -15,6 +15,12 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 
+/**
+ * @author qiwen.li
+ * @since 2021/04/14
+ * @description oauth2 client客户端信息查询
+ * @version 1.0.0
+ */
 @Slf4j
 @Configuration
 public class OauthClientDetailsServiceImpl implements ClientDetailsService {
