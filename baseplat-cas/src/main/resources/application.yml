@@ -1,3 +1,12 @@
-
-security:
+lirlo:
   cas:
+    validateFilters:
+    signOutFilters:
+    authFilters:
+    assertionFilters:
+    requestWrapperFilters:
+    casServerUrlPrefix: http://192.168.1.128:8443/cas
+    casServerLoginUrl: https://192.168.1.128:8443/cas/login
+    serverName: http://127.0.0.1:8899
+server:
+  port: 8899

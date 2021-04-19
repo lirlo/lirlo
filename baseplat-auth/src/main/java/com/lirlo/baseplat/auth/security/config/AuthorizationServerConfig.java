@@ -49,7 +49,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     /**
      * signingKey
      */
-    @Value("${security.jwt.signingKey}")
+    @Value("${lirlo.security.jwt.signingKey}")
     private String signingKey;
 
     /**

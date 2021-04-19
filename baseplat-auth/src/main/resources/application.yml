@@ -1,5 +1,9 @@
 
 lirlo:
+  security:
+    jwt:
+      signingKey: lirlo
+      header: Authorization
   swagger-config:
     enable-swagger: true
     dockets:
@@ -71,8 +75,5 @@ server:
   servlet:
     context-path: /auth
 
-security:
-  jwt:
-    signingKey: lirlo
-    header: Authorization
+
 

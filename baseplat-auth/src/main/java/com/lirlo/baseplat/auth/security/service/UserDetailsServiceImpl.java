@@ -44,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Value("${security.jwt.header}")
+    @Value("${lirlo.security.jwt.header}")
     private String tokenHeader;
 
     /**
