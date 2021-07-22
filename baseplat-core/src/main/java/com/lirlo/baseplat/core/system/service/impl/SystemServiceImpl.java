@@ -5,14 +5,19 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lirlo.baseplat.core.system.mapper.OrgMapper;
 import com.lirlo.baseplat.core.system.mapper.SystemMapper;
 import com.lirlo.baseplat.core.system.pojo.T_SYS_ACCOUNT;
+import com.lirlo.baseplat.core.system.pojo.T_SYS_ORG;
 import com.lirlo.baseplat.core.system.service.SystemService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author lirlo
@@ -22,6 +27,8 @@ public class SystemServiceImpl implements SystemService {
 
     @Resource
     SystemMapper systemMapper;
+    @Resource
+    OrgMapper orgMapper;
 
     @Resource
     RedisTemplate<String,Object> redisTemplate;
@@ -84,6 +91,5 @@ public class SystemServiceImpl implements SystemService {
 //        defaultMQProducer.shutdown();
         return info;
     }
-
 
 }

@@ -34,6 +34,9 @@ spring:
     password:
     cluster:
       nodes: 127.0.0.1:6379
+  elasticsearch:
+    rest:
+      uris: http://localhost:9200
 
 
 lirlo:
@@ -83,4 +86,14 @@ rocket:
 
 server:
   port: 8081
+
+# actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ['*']
+  health:
+    elasticsearch:
+      response-timeout: 3s
 

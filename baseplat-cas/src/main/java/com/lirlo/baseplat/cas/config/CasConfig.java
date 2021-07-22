@@ -94,9 +94,9 @@ public class CasConfig {
     }
 
     /**
-    * wraper过滤器
-    * @return
-    */
+     * wraper过滤器
+     * @return
+     */
     @Bean
     public FilterRegistrationBean<HttpServletRequestWrapperFilter> filterWrapperRegistration() {
         FilterRegistrationBean<HttpServletRequestWrapperFilter> registration = new FilterRegistrationBean<HttpServletRequestWrapperFilter>();
